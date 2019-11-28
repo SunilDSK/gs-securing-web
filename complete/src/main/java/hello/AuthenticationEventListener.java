@@ -2,6 +2,7 @@ package hello;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationListener;
@@ -26,6 +27,9 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
     @Override
     public void onApplicationEvent(AbstractAuthenticationEvent authenticationEvent) {
         Authentication authentication = authenticationEvent.getAuthentication();
+        MDC.put("user.name", authentication.getName());
+        MDC.put("source.ip", request.getRemoteAddr()); //Ignoring X-FORWARDED-FOR to keep it simple
+        MDC.put("url.full", request.getRequestURI());
 
         // These would be duplicate events in the case of successful logins
         if ((authenticationEvent instanceof InteractiveAuthenticationSuccessEvent) ||
@@ -35,8 +39,10 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
         }
 
         if (authentication.isAuthenticated()) {
+            MDC.put("event.category", LogEvents.LOGIN_SUCCESS.name());
             logger.info("[{}] logged in successfully", authentication.getName());
         } else {
+            MDC.put("event.category", LogEvents.LOGIN_FAILURE.name());
             logger.warn("[{}] failed to log in with password [{}]", authentication.getName(),
                     authentication.getCredentials().toString().replaceAll(".", "*"));
 
