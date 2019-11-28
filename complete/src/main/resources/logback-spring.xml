@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="co.elastic.logging.logback.EcsEncoder">
+            <serviceName>gs-securing-web</serviceName>
+        </encoder>
+    </appender>
+
+    <appender name="json" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH:-./logs}/log.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log.json.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="co.elastic.logging.logback.EcsEncoder">
+            <serviceName>gs-securing-web</serviceName>
+        </encoder>
+    </appender>
+    ​
+    <root level="INFO">
+        <appender-ref ref="console"/>
+        <appender-ref ref="json"/>
+    </root>
+</configuration>
