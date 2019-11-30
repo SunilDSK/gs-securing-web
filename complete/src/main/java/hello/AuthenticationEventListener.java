@@ -28,8 +28,12 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
     public void onApplicationEvent(AbstractAuthenticationEvent authenticationEvent) {
         Authentication authentication = authenticationEvent.getAuthentication();
         MDC.put("user.name", authentication.getName());
-        MDC.put("source.ip", request.getRemoteAddr()); //Ignoring X-FORWARDED-FOR to keep it simple
         MDC.put("url.full", request.getRequestURI());
+        if(request.getHeader("x-forwarded-for") != null){
+            MDC.put("source.ip", request.getHeader("x-forwarded-for"));
+        } else {
+            MDC.put("source.ip", request.getRemoteAddr());
+        }
 
         // These would be duplicate events in the case of successful logins
         if ((authenticationEvent instanceof InteractiveAuthenticationSuccessEvent) ||
