@@ -55,6 +55,9 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
                 throw new RuntimeException("There is no admin here...");
             }
         }
+
+        // Clear MDC data for reuse of the thread
+        MDC.clear();
     }
 
 }
