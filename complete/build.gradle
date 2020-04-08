@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.6.RELEASE")
     }
 }
 
@@ -31,7 +31,7 @@ dependencies {
     // tag::security[]
     compile("org.springframework.boot:spring-boot-starter-security")
     // end::security[]
-    implementation("co.elastic.logging:logback-ecs-encoder:0.1.3"){
+    implementation("co.elastic.logging:logback-ecs-encoder:0.3.0"){
         because 'we want to have structured logging'
     }
     testCompile("junit:junit")
