@@ -43,10 +43,10 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
         }
 
         if (authentication.isAuthenticated()) {
-            MDC.put("event.category", LogEvents.LOGIN_SUCCESS.name());
+            MDC.put("event.action", LogEvents.LOGIN_SUCCESS.name());
             logger.info("[{}] logged in successfully", authentication.getName());
         } else {
-            MDC.put("event.category", LogEvents.LOGIN_FAILURE.name());
+            MDC.put("event.action", LogEvents.LOGIN_FAILURE.name());
             logger.warn("[{}] failed to log in with password [{}]", authentication.getName(),
                     authentication.getCredentials().toString().replaceAll(".", "*"));
 
